@@ -6,18 +6,85 @@
 <%- include alert %>
 <form method="post">
   <label for="title">标题：</label><br />
-  <input type="text" name="title" value="<%= locals.post.title%>" class="input-block-level"/><br />
-  <label for="post">正文：</label><br />
-  <textarea name="post" rows="20" cols="100"  class="input-block-level"><%= locals.post.originPost%></textarea><br />
-  <input type="submit" value="更新" class="btn btn-primary"/>    
-  <a class="btn" onclick="cancelEdit()">取消</a>
+  <% if(locals.post){ %>
+  <input type="text" name="title" class="input-block-level" value="<%= locals.post.title%>"/><br />
+  <% }else{ %>
+  <input type="text" name="title" class="input-block-level"/><br />
+  <% } %>
+  
+<div>
+  <label class='bold' for='t_content'>内容和标签</label>
+  <div class='tabbable'>
+    <ul class='nav nav-tabs'>
+      <li class='active'><a href='#markdown' data-toggle='pill'>Markdown</a></li>
+      <li><a href='#preview' data-toggle='pill' class="preview-btn">预览</a></li>
+      <li><a href='#tags' data-toggle='pill'>标签</a></li>
+    </ul>
+    <div class='tab-content'>
+      <div class='active tab-pane' id='markdown'>
+        <div id='wmd-button-bar'></div>
+        <div class='input'>
+          <% if(locals.post){ %>
+          <textarea name="post" rows="20" cols="100" id='wmd-input' class="input-block-level"><%= locals.post.originPost%></textarea>
+          <% }else{ %>
+          <textarea name="post" rows="20" cols="100" id='wmd-input' class="input-block-level"></textarea>
+          <% } %>
+        </div>
+      </div>
+      <div id='preview' class='tab-pane'>
+        <div id='wmd-preview' class='wmd-preview topic-wmd-preview'></div>
+      </div>
+      <div id='tags' class='tab-pane'>
+        <div class='tags_select'>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  <input type="submit" value="发布" class="btn btn-primary"/>    
+  
+ 
 </form>
 
+<script src="/libs/jquery/jquery.js"></script>
+<script src="/libs/bootstrap/js/bootstrap.js"></script>
+<!-- ajaxupload -->
+<script src='/libs/ajax-upload/ajaxupload.js'></script>
+<!-- markdown editor -->
+<script src='/libs/pagedown/Markdown.Converter.js'></script>
+<script src='/libs/showdown.js'></script>
+<script src='/libs/pagedown/Markdown.Editor.js'></script>
 <script>
-	function cancelEdit(){
-		if(confirm("确定取消修改吗?")){
-			history.go(-1);
-		}
-	}
+$(document).ready(function(){
+  var editor;
+  function run_md_editor(){
+    // var converter = Markdown.getSanitizingConverter();
+    var converter = new Showdown.converter();
+    editor = new Markdown.Editor(converter);
+    editor.run();
+  }
+  run_md_editor();
+
+  $('.preview-btn').click(function() {
+    editor.makePreviewHtml();
+    prettyPrint();
+  });
+
+  $('.tag_selectable').click(function(){
+    $(this).toggleClass('tag_select');
+  });
+
+  $('#submit_btn').click(function(){
+    var values=[];
+    $('.tag_selectable').each(function(){
+      if($(this).hasClass('tag_select')){
+        values.push($(this).attr('tag_id'));
+      }
+    });
+    $('#topic_tags').val(values);
+    $('#create_topic_form').submit();
+  });
+});
 </script>
 <%- include footer %>

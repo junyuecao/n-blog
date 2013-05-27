@@ -6,6 +6,8 @@
 <link rel="shortcut icon" href="/images/favicon.ico">
 <link rel="stylesheet" href="/stylesheets/main.css">
 <link rel="stylesheet" href="/stylesheets/style.css">
+<link type="text/css" rel="stylesheet" href="/libs/code-prettify/prettify.css">
+<script src="/libs/code-prettify/prettify.js"></script>
 </head>
 <body>
 <nav class="navbar navbar-static-top navbar-inverse">
@@ -26,11 +28,11 @@
 			  </ul>
 			  <ul class="nav pull-right">
 			    <% if(locals.user){ %>
-			    <li><a title="用户" href="/<%= locals.user.name %>"><%= locals.user.name %></a></li>
-				  <li><a title="登出" href="/logout">登出</a></li>
+			    <li><a title="用户" href="/user/<%= locals.user.name %>"><%= locals.user.name %></a></li>
+				  <li><a title="登出" href="/signout">登出</a></li>
 					<% } else { %>
-				  <li><a title="登录" href="/login">登录</a></li>
-				  <li><a title="注册" href="/reg">注册</a></li>
+				  <li><a title="登录" href="/signin">登录</a></li>
+				  <li><a title="注册" href="/signup">注册</a></li>
 					<% } %>
 			  </ul>
 			</div>
