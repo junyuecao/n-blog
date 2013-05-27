@@ -163,6 +163,7 @@ module.exports = function(app) {
 				}
 				res.render('user', {
 					title: user.name +'的文章 - 学习轨迹',
+					name:user.name,
 					posts: posts,
 					user: req.session.user,
 					success: req.flash('success').toString(),
