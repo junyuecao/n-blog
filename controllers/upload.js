@@ -28,7 +28,7 @@ exports.uploadImage = function (req, res, next) {
       if (err) {
         return next(err);
       }
-      var url = '/user_data/images/' + uid + '/' + encodeURIComponent(filename);
+      var url = '/public/user_data/images/' + uid + '/' + encodeURIComponent(filename);
       res.send({ status: 'success', url: url });
     });
   });

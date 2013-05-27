@@ -1,11 +1,4 @@
-/* inspired by http://yihui.name/cn/ */
-/*header{padding:.5em 0;border-bottom:1px solid #cccccc;}
-nav{float:left;font-family:"Microsoft YaHei";font-size:1.1em;text-transform:uppercase;margin-left:-12em;width:9em;text-align:right;}
-nav a{display:block;text-decoration:none;padding:.7em 1em;color:#000000;}
-nav a:hover{background-color:#ff0000;color:#f9f9f9;-webkit-transition:color .2s linear;}
-article{font-size:16px;padding-top:.5em;}
-article a{color:#dd0000;text-decoration:none;}
-article a:hover{color:#333333;text-decoration:underline;}*/
+
 .article,  .list ul li a {
 	-webkit-transition: all 150ms ease-in-out;
 	-o-transition: all 150ms ease-in-out;
@@ -47,7 +40,7 @@ cursor: pointer;
 }
 
 .wmd-button > span {
-background-image: url(/libs/pagedown/wmd-buttons.png);
+background-image: url(/public/libs/pagedown/wmd-buttons.png);
 background-repeat: no-repeat;
 background-position: 0px 0px;
 width: 20px;

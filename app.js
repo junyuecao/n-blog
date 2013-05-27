@@ -4,13 +4,13 @@
  */
 
 var express = require('express'),
-	routes = require('./routes'),
-	http = require('http'),
-	path = require('path'),
-	MongoStore = require('connect-mongo')(express),
-	settings = require('./settings'),
-	flash = require('connect-flash'),
-	expressValidator = require('express-validator');
+  routes = require('./routes'),
+  http = require('http'),
+  path = require('path'),
+  MongoStore = require('connect-mongo')(express),
+  settings = require('./settings'),
+  flash = require('connect-flash'),
+  expressValidator = require('express-validator');
 
 var app = express();
 
@@ -27,15 +27,15 @@ app.use(expressValidator);
 app.use(express.methodOverride());
 app.use(express.cookieParser());
 app.use(express.session({
-	secret:settings.cookieSecret,
-	key: settings.db,
-	cookie:{maxAge:1000*60*60*24*30},//30days
-	store: new MongoStore({
+  secret:settings.cookieSecret,
+  key: settings.db,
+  cookie:{maxAge:1000*60*60*24*30},//30days
+  store: new MongoStore({
       db: settings.db.name
     })
 }));
 app.use(app.router);
-app.use(express.static(path.join(__dirname, 'public')));
+app.use('/public',express.static(path.join(__dirname, 'public')));
 
 // development only
 console.log(app.get('env'));
