@@ -4,18 +4,22 @@
   <li class="active">注册</li>
 </ul>
 <%- include alert %>
-<form method="post" class="form-horizontal">
+<form method="post" class="form-horizontal" id="signup-form">
   <div class="control-group">
- 		<label class="control-label" for="name">用户名：</label><input type="text" name="name"/><br />
+ 		<label class="control-label" for="name">用户名：</label>
+    <input type="text" name="name" required minlength="6" maxlength="16"/><br />
 	</div>
   <div class="control-group">
-  	<label class="control-label" for="name">密码： </label><input type="password" name="password"/><br />
+  	<label class="control-label" for="password">密码： </label>
+    <input type="password" name="password" required minlength="6" maxlength="20"/><br />
 	</div>
 	<div class="control-group">
-  	<label class="control-label" for="name">确认密码： </label><input type="password" name="password-repeat"/>
+  	<label class="control-label" for="password-repeat" reqired>确认密码： </label>
+    <input type="password" name="password-repeat"/>
 	</div>
 	<div class="control-group">
-  	<label class="control-label" for="name">邮箱： </label><input type="email" name="email"/>
+  	<label class="control-label" for="email">邮箱： </label>
+    <input type="email" name="email" required/>
 	</div>
 	<div class="control-group">
     <div class="controls">
@@ -23,4 +27,16 @@
     </div>
   </div>
 </form>
+<script src="/libs/jquery-validator/jquery.validate.min.js"></script>
+<script src="/libs/jquery-validator/messages_zh.js"></script>
+<script>
+  $('#signup-form').validate({
+    rules: {
+      password: "required",
+      "password-repeat": {
+        equalTo: "#password"
+      }
+    }
+  });
+</script>
 <%- include footer %>

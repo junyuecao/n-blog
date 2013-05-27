@@ -12,8 +12,18 @@
   最后更新时间：<%= locals.post.lastEditTime.minute %>
   <% }if(locals.user&&(locals.user.name == locals.post.name)) { %>
   <a href="/article/<%= post.name %>/<%= post._id %>/edit">编辑</a>|
-  <a href="/article/<%= post.name %>/<%= post._id %>/delete">删除</a>
+  <a href="/article/<%= post.name %>/<%= post._id %>/delete" id="deleteBtn">删除</a>
   <% } %>
 </p>
 <div class="post"><%- locals.post.post %></div>
+<script>
+  $(function(){
+    $('#deleteBtn').click(function(e){
+      if(!confirm("确定要删除吗?删除后不能恢复!")){
+        e.preventDefault();
+        return;
+      }
+    });
+  })
+</script>
 <%- include footer %>

@@ -48,6 +48,7 @@ User.get = function(name,callback) {
 				mongodb.close();
 				if(doc){
 					var user = new User(doc);
+					user._id = doc._id.toString();
 					callback(err,user);
 				}else{
 					callback(err,null);

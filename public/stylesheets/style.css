@@ -45,6 +45,7 @@ display: inline-block;
 list-style: none;
 cursor: pointer;
 }
+
 .wmd-button > span {
 background-image: url(/libs/pagedown/wmd-buttons.png);
 background-repeat: no-repeat;
@@ -73,6 +74,9 @@ list-style: none;
 }
 .tabbable ul {
 max-height: 40px;
+}
+.tabbable .tab-content {
+	overflow: inherit !important;
 }
 .wmd-button-row {
 position: relative;
@@ -111,4 +115,12 @@ background-color: #F5F5F5;
 	position: fixed;
 	left: 5px;
 	top :250px;
+}
+.error{
+	font-size: 12px;
+	color:#c03523;
+}
+label.error{
+	display: inline;
+	margin-left: 10px;
 }

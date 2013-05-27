@@ -17,8 +17,23 @@ exports.showCreate = function(req, res) {
  * 保存新建的文章
  */
 exports.saveCreate = function(req, res) {
+	req.assert('title','标题不能为空').notEmpty();
+	req.assert('title','标题在100字以内').len(1-200);
+	var errors = req.validationErrors();
+	if(errors){
+		var msg = "";
+		errors.forEach(function (error,index){
+			msg+=error.msg+" ";
+		});
+		req.flash('error', msg);
+		return res.redirect('back');
+	}
 	var currentUser = req.session.user,
 		post = new Post(currentUser.name, req.body.title, req.body.post);
+
+
+	
+	
 	post.save(function(err) {
 		if (err) {
 			req.flash('error', err);

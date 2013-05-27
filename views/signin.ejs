@@ -4,12 +4,12 @@
   <li class="active">登录</li>
 </ul>
 <%- include alert %>
-<form method="post" class="form-horizontal">
+<form method="post" class="form-horizontal" id="signin-form">
 	<div class="control-group">
- 		<label class="control-label" for="name">用户名：</label><input type="text" name="name"/><br />
+ 		<label class="control-label" for="name">用户名：</label><input type="text" name="name" required/><br />
 	</div>
   <div class="control-group">
-  	<label class="control-label" for="name">密码： </label><input type="password" name="password"/><br />
+  	<label class="control-label" for="name">密码： </label><input type="password" name="password" required/><br />
 	</div>
 	<div class="control-group">
     <div class="controls">
@@ -18,4 +18,9 @@
   </div>
          
 </form>
+<script src="/libs/jquery-validator/jquery.validate.min.js"></script>
+<script src="/libs/jquery-validator/messages_zh.js"></script>
+<script>
+  $('#signin-form').validate();
+</script>
 <%- include footer %>

@@ -4,12 +4,12 @@
   <li class="active">编辑文章</li>
 </ul>
 <%- include alert %>
-<form method="post">
+<form method="post" id="edit-form">
   <label for="title">标题：</label><br />
   <% if(locals.post){ %>
-  <input type="text" name="title" class="input-block-level" value="<%= locals.post.title%>"/><br />
+  <input type="text" name="title" class="input-block-level" required minlength="2" type="text" value="<%= locals.post.title%>"/><br />
   <% }else{ %>
-  <input type="text" name="title" class="input-block-level"/><br />
+  <input type="text" name="title" class="input-block-level" required minlength="2" type="text" /><br />
   <% } %>
   
 <div>
@@ -25,9 +25,9 @@
         <div id='wmd-button-bar'></div>
         <div class='input'>
           <% if(locals.post){ %>
-          <textarea name="post" rows="20" cols="100" id='wmd-input' class="input-block-level"><%= locals.post.originPost%></textarea>
+          <textarea name="post" rows="20" cols="100" id='wmd-input' required class="input-block-level"><%= locals.post.originPost%></textarea>
           <% }else{ %>
-          <textarea name="post" rows="20" cols="100" id='wmd-input' class="input-block-level"></textarea>
+          <textarea name="post" rows="20" cols="100" id='wmd-input' required class="input-block-level"></textarea>
           <% } %>
         </div>
       </div>
@@ -47,7 +47,6 @@
  
 </form>
 
-<script src="/libs/jquery/jquery.js"></script>
 <script src="/libs/bootstrap/js/bootstrap.js"></script>
 <!-- ajaxupload -->
 <script src='/libs/ajax-upload/ajaxupload.js'></script>
@@ -55,8 +54,12 @@
 <script src='/libs/pagedown/Markdown.Converter.js'></script>
 <script src='/libs/showdown.js'></script>
 <script src='/libs/pagedown/Markdown.Editor.js'></script>
+<script src="/libs/jquery-validator/jquery.validate.min.js"></script>
+<script src="/libs/jquery-validator/messages_zh.js"></script>
 <script>
+$('#edit-form').validate();
 $(document).ready(function(){
+
   var editor;
   function run_md_editor(){
     // var converter = Markdown.getSanitizingConverter();

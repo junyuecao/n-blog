@@ -9,7 +9,8 @@ var site = require('../controllers/site'),
 	auth = require('../controllers/auth'),
 	sign = require('../controllers/sign'),
 	post = require('../controllers/post'),
-	user = require('../controllers/user');
+	user = require('../controllers/user'),
+	upload = require('../controllers/upload');
 
 var	User = require('../models/user.js'),
 	Post = require('../models/post.js'),
@@ -34,6 +35,8 @@ module.exports = function(app) {
 	app.post('/article/:name/:id/edit', auth.checkUserRight, post.saveEdit);
 
 	app.get('/article/:name/:id/delete', auth.checkUserRight, post.remove);
+
+	app.post('/upload/image', upload.uploadImage);
 
 };
 

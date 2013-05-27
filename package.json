@@ -13,6 +13,8 @@
     "connect-flash": "*",
     "markdown": "*",
     "mongoskin" : "*",
-    "express-validator" : "*"
+    "express-validator" : "*",
+    "ndir":"*",
+    "fs.extra":"*"
   }
 }
