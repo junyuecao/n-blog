@@ -1,0 +1,23 @@
+<%- include header %>
+<ul class="breadcrumb">
+  <li><a href="/">首页</a> <span class="divider">/</span></li>
+  <li class="active">编辑文章</li>
+</ul>
+<%- include alert %>
+<form method="post">
+  <label for="title">标题：</label><br />
+  <input type="text" name="title" value="<%= locals.post.title%>" class="input-block-level"/><br />
+  <label for="post">正文：</label><br />
+  <textarea name="post" rows="20" cols="100"  class="input-block-level"><%= locals.post.originPost%></textarea><br />
+  <input type="submit" value="更新" class="btn btn-primary"/>    
+  <a class="btn" onclick="cancelEdit()">取消</a>
+</form>
+
+<script>
+	function cancelEdit(){
+		if(confirm("确定取消修改吗?")){
+			history.go(-1);
+		}
+	}
+</script>
+<%- include footer %>

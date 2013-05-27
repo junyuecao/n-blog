@@ -1,0 +1,19 @@
+<%- include header %>
+<ul class="breadcrumb">
+  <li><a href="/">首页</a> <span class="divider">/</span></li>
+  <li><a href="/<%= locals.post.name %>"><%= locals.post.name %></a> <span class="divider">/</span></li>
+  <li>查看文章</li>
+</ul>
+<%- include alert %>
+<h2><%= locals.post.title %></h2>
+<p class="info">
+  作者：<a href="/<%= locals.post.name %>"><%= locals.post.name %></a> |
+  发表于 <%= locals.post.time.minute %> <% if(locals.post.lastEditTime.minute){ %>|
+  最后更新时间：<%= locals.post.lastEditTime.minute %>
+  <% }if(locals.user&&(locals.user.name == locals.post.name)) { %>
+  <a href="/article/<%= post.name %>/<%= post._id %>/edit">编辑</a>|
+  <a href="/article/<%= post.name %>/<%= post._id %>/delete">删除</a>
+  <% } %>
+</p>
+<div class="post"><%- locals.post.post %></div>
+<%- include footer %>

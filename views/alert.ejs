@@ -1,0 +1,15 @@
+
+	<% if('development' == locals.settings.env){ %>
+		<% for(var key in locals){%>
+		<%= key %>:<%= locals[key] %><br>
+	<% }} %>
+	<% if (locals.success) { %>
+	<div class="alert alert-success">
+  	<p ><%= locals.success %></p>
+	</div>
+	<% } %>
+	<% if (locals.error) { %>
+	<div class="alert alert-success">
+	  <p><%= locals.error %> </p>
+	</div>
+	<% } %>

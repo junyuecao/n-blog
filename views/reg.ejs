@@ -1,0 +1,26 @@
+<%- include header %>
+<ul class="breadcrumb">
+  <li><a href="/">首页</a> <span class="divider">/</span></li>
+  <li class="active">注册</li>
+</ul>
+<%- include alert %>
+<form method="post" class="form-horizontal">
+  <div class="control-group">
+ 		<label class="control-label" for="name">用户名：</label><input type="text" name="name"/><br />
+	</div>
+  <div class="control-group">
+  	<label class="control-label" for="name">密码： </label><input type="password" name="password"/><br />
+	</div>
+	<div class="control-group">
+  	<label class="control-label" for="name">确认密码： </label><input type="password" name="password-repeat"/>
+	</div>
+	<div class="control-group">
+  	<label class="control-label" for="name">邮箱： </label><input type="email" name="email"/>
+	</div>
+	<div class="control-group">
+    <div class="controls">
+      <input type="submit" value="注册" class="btn btn-primary"/>
+    </div>
+  </div>
+</form>
+<%- include footer %>

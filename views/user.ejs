@@ -1,0 +1,17 @@
+<%- include header %>
+<ul class="breadcrumb">
+  <li><a href="/" class="active">首页</a> <span class="divider">/</span></li>
+  <li class="active"><%= locals.user.name %></li>
+</ul>
+<%- include alert %>
+<% locals.posts.forEach(function(post, index){ %>
+  <article class="article">
+  	<p><h3><a href="/article/<%= post.name %>/<%= post._id %>"><%= post.title %></a></h3></p>
+  	<p class="info">
+  	  作者：<a href="/<%= post.name %>"><%= post.name %></a> |
+  	  日期：<%= post.time.minute %>
+  	</p>
+  	<div><%- post.post %></div>
+  </article>
+<% }) %>
+<%- include footer %>
