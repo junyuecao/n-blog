@@ -1,4 +1,5 @@
-
+.pl5{padding-left: 5px;}
+.pr5{padding-right: 5px;}
 .article,  .list ul li a {
 	-webkit-transition: all 150ms ease-in-out;
 	-o-transition: all 150ms ease-in-out;
@@ -116,4 +117,40 @@ background-color: #F5F5F5;
 label.error{
 	display: inline;
 	margin-left: 10px;
+}
+.post-box, .reply-box, .replies{
+	margin-bottom: 15px;
+	background: hsla(0, 0%, 100%, 1);
+	box-shadow: 0px 0px 2px hsl(0,0%,50%);
+	border: 1px solid #eee;
+}
+.post-box,  .reply-content{
+	padding: 5px 20px;
+}
+.reply-info{
+	height: 30px;
+}
+
+.reply-box .header,.replies .header{
+	margin-bottom: 10px;
+	padding: 7px 10px;
+	background: hsl(0,0%,88%);
+	background-image: linear-gradient(hsl(0, 0%, 98%), hsl(0, 0%, 92%));
+	background-image: -webkit-linear-gradient(hsl(0, 0%, 97%), hsl(0, 0%, 92%));
+}
+.header .col_fade {
+	color: hsl(202, 6%, 34%);
+}
+.replies{ padding : 3px 30px;}
+.session-title{
+	margin: 10px 0;
+}
+.reply-cell {
+	padding: 5px 0;
+	overflow: hidden;
+	position: relative;
+	box-shadow: 0px 1px 0px hsl(0, 0%, 90%);
+}
+.reply-cell:last-child {
+border-bottom: none;
 }

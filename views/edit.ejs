@@ -42,7 +42,11 @@
     </div>
   </div>
 </div>
-  <input type="submit" value="发布" class="btn btn-primary"/>    
+
+  <input type="submit" value="发布" class="btn btn-primary"/>   
+  <% if(locals.post){ %>
+    <a href="<%= locals.goBackUrl %>" class="btn">返回</a>     
+  <% } %>
   
  
 </form>

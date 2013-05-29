@@ -1,6 +1,6 @@
 {
   "name": "af-node-base",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "scripts": {
     "start": "node app.js"
@@ -11,7 +11,8 @@
     "mongodb": "*",
     "connect-mongo": "*",
     "connect-flash": "*",
-    "markdown": "*",
+    "node-markdown":"*",
+    "pagedown": "*",
     "mongoskin" : "*",
     "express-validator" : "*",
     "ndir":"*",

@@ -1,6 +1,7 @@
-var mongodb = require('./db'),
-	markdown = require('markdown').markdown;
-	ObjectID = require('mongodb').ObjectID;
+var mongodb = require('./db');
+var markdown = require('node-markdown').Markdown;
+var	ObjectID = require('mongodb').ObjectID;
+var utils = require('../libs/utils');
 
 var Post = function(name,title,post){
 	this.name = name;
@@ -11,15 +12,7 @@ var Post = function(name,title,post){
 module.exports = Post;
 
 Post.prototype.save = function(callback){
-	var date = new Date();
-
-	var time = {
-		date : date,
-		year : date.getFullYear(),
-		month : date.getFullYear() + "-" + (date.getMonth()+1),
-		day : date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate(),
-		minute : date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes()
-	};
+	var time = utils.getTime();
 	var lastEditTime = time;
 
 	var post = {
@@ -111,7 +104,7 @@ Post.getAll = function(name,callback){
 				//解析 markdown 为 html
 				docs.forEach(function(doc){
 					doc.originPost = doc.post;
-					doc.post = markdown.toHTML(doc.post);
+					doc.post = markdown(doc.post,true);
 				});
 				callback(null,docs);//成功！以数组形式返回查询的结果
 			});
@@ -138,7 +131,7 @@ Post.getOne = function (name,day,title,callback){
 				}
 				//解析 markdown 为 html
 				doc.originPost = doc.post;
-				doc.post = markdown.toHTML(doc.post);
+				doc.post = markdown(doc.post,true);
 				callback(null,doc);
 			});
 		});
@@ -167,7 +160,9 @@ Post.getById = function(id,callback){
 				}
 				//解析 markdown 为 html
 				doc.originPost = doc.post;
-				doc.post = markdown.toHTML(doc.post);
+				// doc.post = safeConverter.makeHtml(doc.post);
+				doc.post = markdown(doc.post,true);
+
 				callback(null,doc);
 			});
 		});

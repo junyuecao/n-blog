@@ -1,3 +1,5 @@
+var Reply = require('../models/reply');
+
 /**
  *检查是否为未登录状态
  */
@@ -34,4 +36,18 @@ exports.checkUserRight = function (req,res,next){
 		return res.redirect('/'+req.params.name);
 	}
 	next();
+};
+
+exports.checkDeleteReplyRight = function (req, res, next){
+	Reply.getById(req.params.replyId, function (err, reply){
+			if (err) {
+				req.flash('error',err);
+				return res.send(500,{status:'err'});
+			}
+			if(reply.name != req.session.user.name){
+				req.flash('error','没有权限!');
+				return res.send(200,{status:'没有权限'});
+			}
+			next();			
+	});
 };

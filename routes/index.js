@@ -5,16 +5,18 @@
  * /post ：发表文章
  * /logout ：登出
  */
-var site = require('../controllers/site'),
-	auth = require('../controllers/auth'),
-	sign = require('../controllers/sign'),
-	post = require('../controllers/post'),
-	user = require('../controllers/user'),
-	upload = require('../controllers/upload');
+var site = require('../controllers/site');
+var auth = require('../controllers/auth');
+var sign = require('../controllers/sign');
+var post = require('../controllers/post');
+var user = require('../controllers/user');
+var upload = require('../controllers/upload');
+var reply = require('../controllers/reply');
 
-var	User = require('../models/user.js'),
-	Post = require('../models/post.js'),
-	util = require('util');
+var	User = require('../models/user.js');
+var Post = require('../models/post.js');
+var util = require('util');
+
 
 
 module.exports = function(app) {
@@ -33,10 +35,15 @@ module.exports = function(app) {
 	app.get('/article/:name/:id', post.show);
 	app.get('/article/:name/:id/edit', auth.checkUserRight, post.showEdit);
 	app.post('/article/:name/:id/edit', auth.checkUserRight, post.saveEdit);
-
 	app.get('/article/:name/:id/delete', auth.checkUserRight, post.remove);
 
+	app.post('/reply/:postId', auth.checkLogin, reply.saveCreate);
+	app.post('/reply/:postId/:replyId', auth.checkLogin, reply.saveCreate);
+	app.get('/reply/:postId/:replyId/delete', auth.checkDeleteReplyRight, reply.remove);
+
 	app.post('/upload/image', upload.uploadImage);
+
+
 
 };
 

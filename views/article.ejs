@@ -5,25 +5,140 @@
   <li>查看文章</li>
 </ul>
 <%- include alert %>
-<h2><%= locals.post.title %></h2>
-<p class="info">
-  作者：<a href="/user/<%= locals.post.name %>"><%= locals.post.name %></a> |
-  发表于 <%= locals.post.time.minute %> <% if(locals.post.lastEditTime.minute){ %>|
-  最后更新时间：<%= locals.post.lastEditTime.minute %>
-  <% }if(locals.user&&(locals.user.name == locals.post.name)) { %>
-  <a href="/article/<%= post.name %>/<%= post._id %>/edit">编辑</a>|
-  <a href="/article/<%= post.name %>/<%= post._id %>/delete" id="deleteBtn">删除</a>
-  <% } %>
-</p>
-<div class="post"><%- locals.post.post %></div>
+<div class="post-box">
+  <h2><%= locals.post.title %></h2>
+  <p class="info">
+    作者：<a href="/user/<%= locals.post.name %>"><%= locals.post.name %></a> |
+    发表于 <%= locals.post.time.minute %> <% if(locals.post.lastEditTime.minute){ %>|
+    最后更新时间：<%= locals.post.lastEditTime.minute %>
+    <% }if(locals.user&&(locals.user.name == locals.post.name)) { %>
+    <a href="/article/<%= post.name %>/<%= post._id %>/edit">编辑</a>|
+    <a href="/article/<%= post.name %>/<%= post._id %>/delete" id="deleteBtn">删除</a>
+    <% } %>
+  </p>
+  <div class="post"><%- locals.post.post %></div>
+</div>
+<% if(true||locals.replyCount && locals.replyCount!=0){ %>
+<div class="replies">
+  <h4 class="session-title">共<%= locals.replyCount %> 条回复</h4>
+  <% locals.replies.forEach(function(reply, index){ %>
+<div class="reply-cell" id="<%= reply._id %>">
+  <div class="reply-info">
+    <div class="user-info pull-left">
+      <span class="reply_author">由
+        <a class="dark" href="/user/<%= reply.name %>"><%= reply.name %></a>
+      </span>
+      <span class="col_fade">发表于
+        <a href="#<%= reply._id %>"><%= reply.time.minute %></a>
+      </span>
+    </div>
+    <div class="user-action pull-right">
+      <% if(locals.user && (reply.name == locals.user.name)) { %>
+        <span><a href="/reply/<%= locals.post._id %>/<%= reply._id %>/delete" data-action="delete-reply">删除</a></span>
+      <% } %>
+      <span class="col_fade">#<%= index+1 %></span>
+      
+    <!--       <span>        
+          <a href="javascript:void(0)" class="dark reply2_btn">回复</a>  
+      </span> -->
+    </div>
+    
+  </div>
+  <div class="clearfix reply-content"><%- reply.content %></div>
+</div>
+    <% }) %>
+</div>
+<% } %>
+<div class="reply-box">
+  <div class="header"><span class="col_fade">发表回复</span></div>
+  <div class="pl5 pr5">
+    <form action="/reply/<%= post._id %>" method="post" id="reply-form">
+      <div class='tabbable'>
+        <ul class='nav nav-tabs'>
+          <li class='active'><a href='#markdown' data-toggle='pill'>Markdown</a></li>
+          <li><a href='#preview' data-toggle='pill' class="preview-btn">预览</a></li>
+          <li><a href='#tags' data-toggle='pill'>标签</a></li>
+        </ul>
+        <div class='tab-content'>
+          <div class='active tab-pane' id='markdown'>
+            <div id='wmd-button-bar'></div>
+            <div class='input'>            
+              <textarea name="content" rows="10" cols="100" id='wmd-input' required class="input-block-level"></textarea>
+            </div>
+          </div>
+          <div id='preview' class='tab-pane'>
+            <div id='wmd-preview' class='wmd-preview topic-wmd-preview'></div>
+          </div>
+          <div id='tags' class='tab-pane'>
+            <div class='tags_select'>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <input type="submit" value="回复" class="btn btn-primary">
+    </form>
+  </div>
+</div>
+
+<script src="/public/libs/bootstrap/js/bootstrap.js"></script>
+<!-- ajaxupload -->
+<script src='/public/libs/ajax-upload/ajaxupload.js'></script>
+<!-- markdown editor -->
+<script src='/public/libs/pagedown/Markdown.Converter.js'></script>
+<script src='/public/libs/showdown.js'></script>
+<script src='/public/libs/pagedown/Markdown.Editor.js'></script>
+<script src="/public/libs/jquery-validator/jquery.validate.min.js"></script>
+<script src="/public/libs/jquery-validator/messages_zh.js"></script>
 <script>
-  $(function(){
-    $('#deleteBtn').click(function(e){
-      if(!confirm("确定要删除吗?删除后不能恢复!")){
-        e.preventDefault();
-        return;
+
+$('#reply-form').validate();
+$(document).ready(function(){
+
+  var editor;
+  function run_md_editor(){
+    // var converter = Markdown.getSanitizingConverter();
+    var converter = new Showdown.converter();
+    editor = new Markdown.Editor(converter);
+    editor.run();
+  }
+  run_md_editor();
+
+  $('.preview-btn').click(function() {
+    editor.makePreviewHtml();
+    prettyPrint();
+  });
+
+  $('.tag_selectable').click(function(){
+    $(this).toggleClass('tag_select');
+  });
+
+  $('#submit_btn').click(function(){
+    var values=[];
+    $('.tag_selectable').each(function(){
+      if($(this).hasClass('tag_select')){
+        values.push($(this).attr('tag_id'));
       }
     });
-  })
+    $('#topic_tags').val(values);
+    $('#create_topic_form').submit();
+  });
+
+  $(document).on('click.delete-reply','[data-action="delete-reply"]', function (e){
+    if(!confirm('确定要删除评论吗?')){
+      e.preventDefault();
+      return;
+    }
+  });
+});
+$(function(){
+  $('#deleteBtn').click(function(e){
+    if(!confirm("确定要删除吗?删除后不能恢复!")){
+      e.preventDefault();
+      return;
+    }
+  });
+});
 </script>
 <%- include footer %>

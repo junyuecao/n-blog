@@ -1,5 +1,5 @@
-var User = require('../models/user'),
-	Post = require('../models/post');
+var User = require('../models/user');
+var Post = require('../models/post');
 
 exports.index = function(req, res) {
 	User.get(req.params.name, function(err, user) {

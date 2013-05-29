@@ -1,5 +1,6 @@
 var Post = require('../models/post');
-
+var markdown = require('markdown').markdown;
+var Reply = require('../models/reply');
 /**
  * 显示发表文章界面
  */
@@ -29,10 +30,7 @@ exports.saveCreate = function(req, res) {
 		return res.redirect('back');
 	}
 	var currentUser = req.session.user,
-		post = new Post(currentUser.name, req.body.title, req.body.post);
-
-
-	
+		post = new Post(currentUser.name, req.body.title, req.body.post);	
 	
 	post.save(function(err) {
 		if (err) {
@@ -45,21 +43,32 @@ exports.saveCreate = function(req, res) {
 };
 
 /**
- * 根据ID显示文章
+ * 根据ID显示文章和评论
  */
 exports.show = function(req, res) {
+	var name = req.params.name;
+	var postId = req.params.id;
 	Post.getById(req.params.id, function (err, post) {
 		if (err) {
 			req.flash('error', err);
 			return res.redirect('/');
 		}
-		res.render('article', {
-			title: post.title +' - ' + post.name + ' - 学习轨迹',
-			post: post,
-			user: req.session.user,
-			success: req.flash('success').toString(),
-			error: req.flash('error').toString()
+		Reply.getRepliesByPostId(postId, function (err,replies){
+			if (err) {
+				req.flash('error', err);
+				return res.redirect('/');
+			}
+			res.render('article', {
+				title: post.title +' - ' + post.name + ' - 学习轨迹',
+				post: post,
+				replies : replies,
+				replyCount: replies.length,
+				user: req.session.user,
+				success: req.flash('success').toString(),
+				error: req.flash('error').toString()
+			});
 		});
+		
 	});
 };
 
@@ -78,6 +87,7 @@ exports.showEdit = function(req, res) {
 			title: '[编辑] ' + post.title +' - ' + post.name + ' - 学习轨迹',
 			post: post,
 			user: req.session.user,
+			goBackUrl:'/article/' + req.session.user.name + '/' + req.params.id,
 			success: req.flash('success').toString(),
 			error: req.flash('error').toString()
 		});
