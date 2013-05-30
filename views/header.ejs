@@ -5,8 +5,9 @@
 <title><%= locals.title %></title>
 <link rel="shortcut icon" href="/public/images/favicon.ico">
 <link rel="stylesheet" href="/public/stylesheets/main.css">
-<link rel="stylesheet" href="/public/stylesheets/style.css">
 <link type="text/css" rel="stylesheet" href="/public/libs/code-prettify/prettify.css">
+<link rel="stylesheet" href="/public/stylesheets/style.css">
+
 <script src="/public/libs/code-prettify/prettify.js"></script>
 <script src="/public/libs/jquery/jquery.js"></script>
 
@@ -25,12 +26,12 @@
 			  <ul class="nav">
 			    <li><a title="主页" href="/">主页</a></li>
 			    <% if(locals.user){ %>
-				  <li><a title="发表" href="/post">发表新文章</a></li>
+				  <li><a title="发表" href="/post"><i class="icon-pencil"></i>发表新文章</a></li>
 					<% } %>
 			  </ul>
 			  <ul class="nav pull-right">
 			    <% if(locals.user){ %>
-			    <li><a title="用户" href="/user/<%= locals.user.name %>"><%= locals.user.name %></a></li>
+			    <li><a title="查看我的文章" href="/user/<%= locals.user.name %>"><%= locals.user.name %></a></li>
 				  <li><a title="登出" href="/signout">登出</a></li>
 					<% } else { %>
 				  <li><a title="登录" href="/signin">登录</a></li>
