@@ -58,9 +58,6 @@ exports.show = function(req, res) {
 				req.flash('error', err);
 				return res.redirect('/');
 			}
-			replies.forEach(function(reply, index){
-
-			});
 			res.render('article', {
 				title: post.title +' - ' + post.name + ' - 学习轨迹',
 				post: post,
