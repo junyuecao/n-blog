@@ -9,8 +9,8 @@
   <h2><%= locals.post.title %></h2>
   <p class="info">
     作者：<a href="/user/<%= locals.post.name %>"><%= locals.post.name %></a> |
-    发表于 <%= locals.post.time.minute %> <% if(locals.post.lastEditTime.minute){ %>|
-    最后更新时间：<%= locals.post.lastEditTime.minute %>
+    发表于 <%= locals.post.time.friendly %> <% if(locals.post.lastEditTime.friendly){ %>|
+    最后更新时间：<%= locals.post.lastEditTime.friendly %>
     <% }if(locals.user&&(locals.user.name == locals.post.name)) { %>
     <a href="/article/<%= post.name %>/<%= post._id %>/edit">编辑</a>|
     <a href="/article/<%= post.name %>/<%= post._id %>/delete" id="deleteBtn">删除</a>
@@ -25,18 +25,23 @@
 <div class="reply-cell" id="<%= reply._id %>">
   <div class="reply-info">
     <div class="user-info pull-left">
+      <span class="col_fade"><strong>#<%= index+1 %></strong> 楼 </span>
       <span class="reply_author">由
         <a class="dark" href="/user/<%= reply.name %>"><%= reply.name %></a>
-      </span>
+      </span>    
+
       <span class="col_fade">发表于
-        <a href="#<%= reply._id %>"><%= reply.time.minute %></a>
+        <a href="#<%= reply._id %>"><%= reply.time.friendly %></a>
       </span>
     </div>
+
     <div class="user-action pull-right">
+
       <% if(locals.user && (reply.name == locals.user.name)) { %>
-        <span><a href="/reply/<%= locals.post._id %>/<%= reply._id %>/delete" data-action="delete-reply">删除</a></span>
+        <span class="pull-right ml10"><a href="/reply/<%= locals.post._id %>/<%= reply._id %>/delete" data-action="delete-reply" title="删除"><i class="icon-trash"></i></a></span>
       <% } %>
-      <span class="col_fade">#<%= index+1 %></span>
+      
+      <span class="pull-right reply-reply" ><a href="#" data-action="reply-reply" data-reply-url="/reply/<%= locals.post._id %>/<%= reply._id %>" data-reply-name="<%= reply.name %>" title="回复"><i class="icon-reply"></i></a></span>
       
     <!--       <span>        
           <a href="javascript:void(0)" class="dark reply2_btn">回复</a>  
@@ -45,14 +50,44 @@
     
   </div>
   <div class="clearfix reply-content"><%- reply.content %></div>
+
 </div>
+  <% if(reply.replies.length!=0) { %>
+  <% reply.replies.forEach (function(reply2,index2){ %>
+    <div class="reply-cell reply-cell2" id="<%= reply2._id %>">
+      <div class="reply-info">
+        <div class="user-info pull-left">
+          <span class="reply_author">由
+            <a class="dark" href="/user/<%= reply2.name %>"><%= reply2.name %></a>
+          </span>
+          <span class="col_fade">发表于
+            <a href="#<%= reply2._id %>"><%= reply2.time.friendly %></a>
+          </span>
+        </div>
+        <div class="user-action pull-right">
+          <% if(locals.user && (reply2.name == locals.user.name)) { %>
+            <span class="pull-right ml10"><a href="/reply/<%= locals.post._id %>/<%= reply2._id %>/delete" data-action="delete-reply" title="删除"><i class="icon-trash"></i></a></span>
+          <% } %>
+          <span class="pull-right reply-reply" ><a href="#" data-action="reply-reply" data-reply-url="/reply/<%= locals.post._id %>/<%= reply._id %>" data-reply-name="<%= reply2.name %>" title="回复"><i class="icon-reply"></i></a></span>
+          
+        <!--       <span>        
+              <a href="javascript:void(0)" class="dark reply2_btn">回复</a>  
+          </span> -->
+        </div>
+        
+      </div>
+      <div class="clearfix reply-content"><%- reply2.content %></div>
+
+    </div>
+
+   <% });} %>
     <% }) %>
 </div>
 <% } %>
 <div class="reply-box">
   <div class="header"><span class="col_fade">发表回复</span></div>
   <div class="pl5 pr5">
-    <form action="/reply/<%= post._id %>" method="post" id="reply-form">
+    <form action="/reply/<%= post._id %>" method="post" id="reply-form" data-url="/reply/<%= post._id %>" >
       <div class='tabbable'>
         <ul class='nav nav-tabs'>
           <li class='active'><a href='#markdown' data-toggle='pill'>Markdown</a></li>
@@ -62,7 +97,8 @@
         <div class='tab-content'>
           <div class='active tab-pane' id='markdown'>
             <div id='wmd-button-bar'></div>
-            <div class='input'>            
+            <div class='input'>
+              <span id="reply-name" class=" alert">回复 <span id="reply-reply-name"></span>:<i class="close-btn" data-dismiss="reply-name">&times;</i></span>           
               <textarea name="content" rows="10" cols="100" id='wmd-input' required class="input-block-level"></textarea>
             </div>
           </div>
@@ -125,10 +161,25 @@ $(document).ready(function(){
   });
 
   $(document).on('click.delete-reply','[data-action="delete-reply"]', function (e){
-    if(!confirm('确定要删除评论吗?')){
+    if(!confirm('确定要删除评论吗?\n*注意*:对应的二级评论也会删除!')){
       e.preventDefault();
       return;
     }
+  })
+  .on('click','[data-dismiss="reply-name"]', function (e){
+    e.preventDefault();
+    var $replyName = $(this).parent();
+    $replyName.hide();
+    $('#reply-form').attr('action',$('#reply-form').data('url'));
+
+  })
+  .on('click','[data-action="reply-reply"]',function (e){
+    e.preventDefault();
+    var actionUrl = $(this).data('reply-url');
+    $('#reply-form').attr('action',actionUrl);
+    $('#reply-reply-name').text($(this).data('reply-name'));
+    $('#wmd-input').focus();
+    $('#reply-name').show();
   });
 });
 $(function(){

@@ -1,6 +1,7 @@
 var Post = require('../models/post');
 var markdown = require('markdown').markdown;
 var Reply = require('../models/reply');
+var utils = require('../libs/utils');
 /**
  * 显示发表文章界面
  */
@@ -48,6 +49,8 @@ exports.saveCreate = function(req, res) {
 exports.show = function(req, res) {
 	var name = req.params.name;
 	var postId = req.params.id;
+	var oneLevel = [];
+	var twoLevel = [];
 	Post.getById(req.params.id, function (err, post) {
 		if (err) {
 			req.flash('error', err);
@@ -58,11 +61,33 @@ exports.show = function(req, res) {
 				req.flash('error', err);
 				return res.redirect('/');
 			}
+			replies.forEach(function (reply,index){
+				reply.time.friendly = utils.formatDate(reply.time.date,true);
+				if(reply.replyId != null){
+					twoLevel.push(reply);
+				}
+				else{
+					oneLevel.push(reply);
+				}
+			});
+			oneLevel.forEach(function (reply,index1){
+				reply.replies = [];
+			});
+			twoLevel.forEach(function (reply2,index2){
+				oneLevel.forEach(function (reply1,index1){
+					if(reply1._id == reply2.replyId){
+						reply1.replies.push(reply2);
+					}
+				})
+			});
+			console.log(oneLevel);
+			post.time.friendly = utils.formatDate(post.time.date,true);
+			post.lastEditTime.friendly = utils.formatDate(post.lastEditTime.date,true);
 			res.render('article', {
 				title: post.title +' - ' + post.name + ' - 学习轨迹',
 				post: post,
-				replies : replies,
-				replyCount: replies.length,
+				replies : oneLevel,
+				replyCount: oneLevel.length,
 				user: req.session.user,
 				success: req.flash('success').toString(),
 				error: req.flash('error').toString()

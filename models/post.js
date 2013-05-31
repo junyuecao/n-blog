@@ -60,8 +60,13 @@ Post.update = function(id,newPost,callback){
 				mongodb.close();
 				return callback(err);
 			}
-			var query = {
+			try{
+				var query = {
 				"_id":ObjectID(id)};
+			}catch(err){
+				console.error(err);
+				return callback(err);
+			}
 
 			collection.update(query,
 				{
@@ -103,6 +108,7 @@ Post.getAll = function(name,callback){
 				}
 				//解析 markdown 为 html
 				docs.forEach(function(doc){
+					doc.time.friendly = utils.formatDate(doc.time.date,true);
 					doc.originPost = doc.post;
 					doc.post = markdown(doc.post,true);
 				});
@@ -147,8 +153,13 @@ Post.getById = function(id,callback){
 			if(err){
 				mongodb.close();
 				return callback(err);
+			}try{
+				var query = {_id:ObjectID(id)};
+			}catch (err){
+				console.error(err);
+				return callback(err);
 			}
-			var query = {_id:ObjectID(id)};
+			
 
 			collection.findOne(query,function (err,doc){
 				mongodb.close();
@@ -179,7 +190,12 @@ Post.remove = function(id,callback){
 				mongodb.close();
 				return callback(err);
 			}
-			var query = {"_id":ObjectID(id)};
+			try{
+				var query = {"_id":ObjectID(id)};
+			}catch (err){
+				console.error(err);
+				return callback(err);
+			}
 
 			collection.remove(query,
 				function (err,count){

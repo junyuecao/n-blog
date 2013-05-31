@@ -50,8 +50,12 @@ Reply.getById = function (id, callback){
       if(err){
         mongodb.close();
         return callback(err);
+      }try{
+        var query = {_id:ObjectID(id)};
+      }catch(err){
+        return callback(err);
       }
-      var query = {_id:ObjectID(id)};
+      
 
       collection.findOne(query,function (err,doc){
         mongodb.close();
@@ -83,7 +87,7 @@ Reply.getRepliesByPostId = function (postId,callback){
         mongodb.close();
         return callback(err);
       }
-      console.log(postId);
+
       var query = {'postId':postId};
 
       collection.find(query).sort({time:1}).toArray(function (err,replies){
@@ -94,7 +98,6 @@ Reply.getRepliesByPostId = function (postId,callback){
         if(replies === null){
           return callback(err,null);
         }
-        console.log(replies);
        
         replies.forEach(function(reply){
           reply.originContent = reply.content;
@@ -108,6 +111,7 @@ Reply.getRepliesByPostId = function (postId,callback){
   });
 };
 
+
 Reply.remove = function(id,callback){
   mongodb.open(function(err,db){
     if(err){
@@ -118,19 +122,40 @@ Reply.remove = function(id,callback){
         mongodb.close();
         return callback(err);
       }
-      var query = {"_id":ObjectID(id)};
+      try{
+        var query = {"_id":ObjectID(id)};
+      }catch(err){
+        return callback(err);
+      }
+      
+
 
       collection.remove(query,
         function (err,count){
-          mongodb.close();
+          
           if(err){
             callback(err,null);
           }
-          callback(null,count);
+
+          //删除二级评论
+          var query2 = {"replyId":id};
+          collection.remove(query2,
+            function (err,count){
+              mongodb.close();
+              if(err){
+                callback(err,null);
+              }
+                callback(null,count);
+            }
+          );
+
         }
       );
+
+      
     });
   });
 };
+
 
 

@@ -11,6 +11,9 @@ var MongoStore = require('connect-mongo')(express);
 var settings = require('./settings');
 var flash = require('connect-flash');
 var expressValidator = require('express-validator');
+var domain = require('domain');
+
+
 
 var app = express();
 
@@ -19,6 +22,22 @@ app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.set('env',settings.env);
+//引入一个domain的中间件，将每一个请求都包裹在一个独立的domain中
+//domain来处理异常
+app.use(function (req,res, next) {
+  var d = domain.create();
+  //监听domain的错误事件
+  d.on('error', function (err) {
+    
+    res.statusCode = 500;
+    res.json({sucess:false, messag: '服务器异常'});
+    d.dispose();
+  });
+
+  d.add(req);
+  d.add(res);
+  d.run(next);
+});
 app.use(flash());
 app.use(express.favicon());
 app.use(express.logger('dev'));
@@ -36,6 +55,11 @@ app.use(express.session({
 }));
 app.use(app.router);
 app.use('/public',express.static(path.join(__dirname, 'public')));
+
+app.use(function(err, req, res, next){
+    console.log(err.stack);
+    res.send("Error");
+});
 
 // development only
 console.log(app.get('env'));
