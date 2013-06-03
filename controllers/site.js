@@ -2,7 +2,7 @@ var Post = require('../models/post');
 
 exports.index = function(req,res){
 	Post.getAll(null, function(err, posts) {
-			if (err) {
+			if (err || posts == null) {
 				posts = [];
 			}
 			res.render('index', {

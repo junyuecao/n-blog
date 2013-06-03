@@ -80,7 +80,6 @@ exports.show = function(req, res) {
 					}
 				})
 			});
-			console.log(oneLevel);
 			post.time.friendly = utils.formatDate(post.time.date,true);
 			post.lastEditTime.friendly = utils.formatDate(post.lastEditTime.date,true);
 			res.render('article', {

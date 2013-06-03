@@ -85,7 +85,7 @@
 </div>
 <% } %>
 <div class="reply-box">
-  <div class="header"><span class="col_fade">发表回复</span></div>
+  <!-- <div class="header"><span class="col_fade">发表回复</span></div> -->
   <div class="pl5 pr5">
     <form action="/reply/<%= post._id %>" method="post" id="reply-form" data-url="/reply/<%= post._id %>" >
       <div class='tabbable'>
@@ -99,7 +99,7 @@
             <div id='wmd-button-bar'></div>
             <div class='input'>
               <span id="reply-name" class=" alert">回复 <span id="reply-reply-name"></span>:<i class="close-btn" data-dismiss="reply-name">&times;</i></span>           
-              <textarea name="content" rows="10" cols="100" id='wmd-input' required class="input-block-level"></textarea>
+              <textarea name="content" rows="10" cols="100" id='wmd-input' required class="input-block-level" placeholder="说点什么呢?"></textarea>
             </div>
           </div>
           <div id='preview' class='tab-pane'>

@@ -33,6 +33,7 @@ border-radius: 1px;
 .navbar .nav>li>a {
 	line-height: 50px;
 }
+.breadcrumb{background-color:transparent; }
 /*--------------------------------------------------------------*/
 
 /*---------------------article页面-----------------------------*/
