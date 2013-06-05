@@ -4,7 +4,7 @@ var ObjectID = require('mongodb').ObjectID;
 var utils = require('../libs/utils');
 var posts = mongodb.collection('posts');
 
-var Post = function(name, title, post) {
+var Post = function (name, title, post) {
   this.name = name;
   this.title = title;
   this.post = post;
@@ -12,7 +12,7 @@ var Post = function(name, title, post) {
 
 module.exports = Post;
 
-Post.prototype.save = function(callback) {
+Post.prototype.save = function (callback) {
   var time = utils.getTime();
   var lastEditTime = time;
 
@@ -25,12 +25,12 @@ Post.prototype.save = function(callback) {
   };
   posts.insert(post, {
     safe: true
-  }, function(err, post) {
+  }, function (err, post) {
     callback(err, post);
   });
 };
 
-Post.update = function(id, newPost, callback) {
+Post.update = function (id, newPost, callback) {
   var date = new Date();
   var lastEditTime = {
     date: date,
@@ -45,7 +45,7 @@ Post.update = function(id, newPost, callback) {
       post: newPost.post,
       lastEditTime: lastEditTime
     }
-  }, function(err, doc) {
+  }, function (err, doc) {
     if (err) {
       callback(err, null);
     }
@@ -53,29 +53,29 @@ Post.update = function(id, newPost, callback) {
   });
 };
 
-Post.getAll = function(name, callback) {
+Post.getAll = function (name, callback) {
   var query = {};
   if (name) {
     query.name = name;
   }
   posts.find(query).sort({
     time: -1
-  }).toArray(function(err, docs) {
-    if (err) {
-      callback(err, null);
-    }
-    //解析 markdown 为 html
-    docs.forEach(function(doc) {
-      doc.time.friendly = utils.formatDate(doc.time.date, true);
-      doc.originPost = doc.post;
-      doc.post = markdown(doc.post, true);
-    });
-    callback(null, docs); //成功！以数组形式返回查询的结果
-  });
+  }).toArray(function (err, docs) {
+        if (err) {
+          callback(err, null);
+        }
+        //解析 markdown 为 html
+        docs.forEach(function (doc) {
+          doc.time.friendly = utils.formatDate(doc.time.date, true);
+          doc.originPost = doc.post;
+          doc.post = markdown(doc.post, true);
+        });
+        callback(null, docs); //成功！以数组形式返回查询的结果
+      });
 };
 
-Post.getById = function(id, callback) {
-  posts.findById(id, function(err, doc) {
+Post.getById = function (id, callback) {
+  posts.findById(id, function (err, doc) {
     if (err) {
       return callback(err, null);
     }
@@ -88,11 +88,47 @@ Post.getById = function(id, callback) {
   });
 }
 
-Post.remove = function(id, callback) {
-  posts.removeById(id, function(err, count) {
+Post.remove = function (id, callback) {
+  posts.removeById(id, function (err, count) {
     if (err) {
       callback(err, null);
     }
     callback(null, count);
   });
 };
+
+Post.getPostsByQuery = function (searchObj, callback) {
+  posts.find({
+    '$or': [
+      {
+        title: searchObj.searchReg
+      },
+      {
+        post: searchObj.searchReg
+      }
+    ]
+  }).limit(10).toArray(function (err, docs) {
+    if(err){
+      return callback(err);
+    }
+    var sreg = new RegExp(searchObj.searchString,'ig');
+    var l = searchObj.searchString.length;
+    var sindexes = [];
+    //解析 markdown 为 html
+    docs.forEach(function (doc) {
+      doc.time.friendly = utils.formatDate(doc.time.date, true);
+      doc.originPost = doc.post;
+      doc.post = markdown(doc.post, true);
+//      while(sreg.test(doc.post)){
+//        sindexes.push(sreg.lastIndex);
+//      }
+//      for(var i = sindexes.length-1;i>=0;i--){
+//        var tmp = doc.post.substr(sindexes[i]-l,l);
+//        doc.post = doc.post.replace(tmp,'<span class="query-string">'+tmp+'</span>');
+//      }
+//      console.log(sindexes);
+    });
+    callback(null,docs);
+
+  });
+}

@@ -29,6 +29,9 @@
 				  <li><a title="发表" href="/post"><i class="icon-pencil"></i>发表新文章</a></li>
 					<% } %>
 			  </ul>
+              <form class="navbar-search pull-left" action="/search" method="get">
+                  <input type="text" class="search-query" placeholder="搜索" name="key">
+              </form>
 			  <ul class="nav pull-right">
 			    <% if(locals.user){ %>
 			    <li><a title="查看我的文章" href="/user/<%= locals.user.name %>"><%= locals.user.name %></a></li>

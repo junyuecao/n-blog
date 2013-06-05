@@ -12,6 +12,7 @@ var post = require('../controllers/post');
 var user = require('../controllers/user');
 var upload = require('../controllers/upload');
 var reply = require('../controllers/reply');
+var search = require('../controllers/search');
 
 var	User = require('../models/user.js');
 var Post = require('../models/post.js');
@@ -42,6 +43,8 @@ module.exports = function(app) {
 	app.get('/reply/:postId/:replyId/delete', auth.checkDeleteReplyRight, reply.remove);
 
 	app.post('/upload/image', upload.uploadImage);
+
+    app.get('/search', search.showResult);
 
     // 其他 路由 404 ...
     app.get('*', function(req, res){

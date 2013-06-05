@@ -1,18 +1,30 @@
 <%- include header %>
+
+<%- include alert %>
+<% if(locals.action&&locals.action=='search'){ %>
+<ul class="breadcrumb">
+  <li class="active">搜索结果</li>
+</ul>
+<% }else { %>
 <ul class="breadcrumb">
   <li class="active">首页</li>
 </ul>
-<%- include alert %>
-
+<% } %>
+<% if(locals.posts.length == 0){ %>
+  <div class="no-result">呃,没有找到你要的结果~</div>
+<% } %>
 <% locals.posts.forEach(function(post, index){ %>
-  <div class="article">
-  	<p><h3><a href="/article/<%= post.name %>/<%= post._id %>"><%= post.title %></a></h3></p>
-  	
-  	<p class="info">
-  	  作者：<a href="/user/<%= post.name %>"><%= post.name %></a> |
-  	  日期：<%= post.time.friendly %>
-  	</p>
-  	<div class="post"><%- post.post %></div>
-  </div>
+<div class="article">
+  <p>
+
+  <h3><a href="/article/<%= post.name %>/<%= post._id %>"><%= post.title %></a></h3></p>
+
+  <p class="info">
+    作者：<a href="/user/<%= post.name %>"><%= post.name %></a> |
+    日期：<%= post.time.friendly %>
+  </p>
+
+  <div class="post"><%- post.post %></div>
+</div>
 <% }) %>
 <%- include footer %>
