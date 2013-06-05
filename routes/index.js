@@ -43,6 +43,14 @@ module.exports = function(app) {
 
 	app.post('/upload/image', upload.uploadImage);
 
+    // 其他 路由 404 ...
+    app.get('*', function(req, res){
+        res.statusCode = 404;
+        res.render('404.ejs', {
+            title: '找不到页面',
+            user: req.session.user
+        });
+    });
 
 
 };
