@@ -1,5 +1,4 @@
 var Post = require('../models/post');
-var markdown = require('markdown').markdown;
 var Reply = require('../models/reply');
 
 /**
